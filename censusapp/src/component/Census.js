@@ -32,7 +32,7 @@ class Census extends Component {
     }
 
     render() {
-        const { error, isLoaded, words } = this.state;
+        const { error, isLoaded, censuses } = this.state;
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
@@ -41,7 +41,7 @@ class Census extends Component {
             return (
                 <ul>
 
-            {censuses.map((s) => ((<li>{s.city}::{s.census}}</li>)))}
+            {censuses.map((s) => ((<li>{s.city}::{s.census}</li>)))}
                 </ul>
 
             );

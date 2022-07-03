@@ -1,13 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
+import Census from './component/Census';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          <Census />
         </p>
         <a
           className="App-link"
