@@ -26,6 +26,50 @@
 .App-link {
   color: #61dafb;
 }
+.sorts, .sortsContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.sorts .active{
+  background-color: black !important;
+  color: white !important;
+}
+table{
+  margin: auto;
+}
+.sorts>*, .sortsContainer>*{
+  /* padding: 0 0.2em; */
+  margin: 0.3rem;
+}
+.sorts p{
+  padding: 0;
+  margin: 0;
+}
+.sortsContainer>*:not(h5){
+  border: 1px solid grey;
+}
+.sorts div{
+  display: flex;
+  flex-direction: column;
+}
+.sorts button{
+  width:0.7rem;
+  height:0.7rem;
+  font-size: 0.5em;
+  font-weight: bolder;
+  margin: auto;
+  padding: 0;
+
+}
+.sorts button :nth-child(1){
+  padding-top: 1px !important;
+
+}
+.sorts button :nth-child(2){
+  padding-bottom: 3px !important;
+}
 
 @keyframes App-logo-spin {
   from {
