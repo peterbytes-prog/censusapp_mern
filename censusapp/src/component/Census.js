@@ -37,6 +37,9 @@ class Census extends Component {
             isLoaded: false,
             censuses: [],
             search: '',
+            page: 0,
+            limit: 10,
+            totalPages:0,
             sorts:{
               city:{
                 asc: false,
@@ -50,6 +53,8 @@ class Census extends Component {
         };
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSort = this.handleSort.bind(this);
+        this.handlePage = this.handlePage.bind(this);
+        this.handleLimit = this.handleLimit.bind(this);
     }
     handleSort(name, ord){
       let cur = this.state.sorts[name];
@@ -62,8 +67,15 @@ class Census extends Component {
       const sortCopy = {...this.state.sorts, [name]: cur};
       this.setState({censuses:sortsFunction(sortCopy, this.state.censuses), sorts:{...sortCopy}});
     }
-    fecthData(search=""){
-      fetch(`http://localhost:8081/api/census?search=${search}`, {
+    handlePage(val){
+      this.fecthData({page:val});
+    }
+    fecthData({search, page, limit}){
+      //search resets page
+      if(search){
+        page = 1;
+      }
+      fetch(`http://localhost:8081/api/census?search=${search||this.state.search}&page=${page==undefined?this.state.page:page}&limit=${limit===undefined?this.state.limit:limit}`, {
           method:'GET'
       })
           .then(res => res.json())
@@ -71,8 +83,11 @@ class Census extends Component {
               (data) => {
                   this.setState({
                       isLoaded: true,
-                      censuses:sortsFunction(this.state.sorts, data),
-                      search: search
+                      censuses:sortsFunction(this.state.sorts, data.census),
+                      search: search||this.state.search,
+                      page: page==undefined?this.state.page:page,
+                      totalPages: data.totalPages,
+                      limit:limit===undefined?this.state.limit:limit
                   });
               },
 
@@ -86,13 +101,33 @@ class Census extends Component {
           )
     }
     handleSearch(val){
-      this.fecthData(val);
+      this.fecthData({search:val});
+    }
+    handleLimit(val){
+      this.fecthData({limit:val});
     }
     // componentDidUpdate(){
     //   // this.fecthData();
     // }
     componentDidMount() {
-        this.fecthData();
+        this.fecthData({});
+    }
+    paginate(){
+      let pags = [];
+      if(this.state.page>=3){
+        pags.push(<button onClick={()=>this.handlePage(0)}>First</button>);
+        for(let i=(this.state.page+1)-2; i<=Math.min((this.state.page+1)+2,this.state.totalPages); i++){
+          pags.push(<button onClick={()=>this.handlePage(i-1)} className={this.state.page+1===i?'active':''} key={`page_${i}`}>{i}</button>);
+        }
+      }else{
+        for(let i=1; i<=Math.min(5,this.state.totalPages); i++){
+          pags.push(<button onClick={()=>this.handlePage(i-1)} className={this.state.page+1===i?'active':''} key={`page_${i}`}>{i}</button>);
+        }
+      }
+      if(this.state.page<this.state.totalPages-1){
+        pags.push(<button onClick={()=>this.handlePage(this.state.totalPages-1)}>Last</button>);
+      }
+      return (<div>{pags}</div>)
     }
     renderResult(){
       const { error, isLoaded, censuses } = this.state;
@@ -108,14 +143,23 @@ class Census extends Component {
             </tr>)
           });
           return (
-              <table>
-                <thead>
-                  <Sorts sorts={ this.state.sorts } handleSort = { this.handleSort }/>
-                </thead>
-                <tbody>
-                  {trs}
-                </tbody>
-              </table>
+              <div>
+                <table>
+                  <thead>
+                    <Sorts sorts={ this.state.sorts } handleSort = { this.handleSort }/>
+                  </thead>
+                  <tbody>
+                    {trs}
+                  </tbody>
+                </table>
+                <div className='paginationMenu' style={{marginTop:'2rem'}}>
+                  { this.paginate() }
+                  <div >
+                    <h4>Limits: </h4>
+                    <input type='number' onInput={(e)=>this.handleLimit(e.target.value)} step='1' value={this.state.limit}/>
+                  </div>
+                </div>
+              </div>
 
           );
       }
