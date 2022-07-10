@@ -26,41 +26,53 @@
 .App-link {
   color: #61dafb;
 }
-.sorts, .sortsContainer{
+
+table{
+  margin: auto;
+  margin-top: 2em;
+}
+
+.sorts>div{
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
+.sortsContainer{
+  /* display: flex; */
+  /* flex-direction: row;
+  align-items: center;
+  justify-content: center; */
+}
 .sorts .active{
   background-color: black !important;
   color: white !important;
 }
-table{
-  margin: auto;
-}
-.sorts>*, .sortsContainer>*{
+.sorts>div>*, .sortsContainer>*{
   /* padding: 0 0.2em; */
   margin: 0.3rem;
 }
 .sorts p{
   padding: 0;
   margin: 0;
+  text-align: center;
+  width:100%;
 }
 .sortsContainer>*:not(h5){
   border: 1px solid grey;
 }
-.sorts div{
+.sorts>div div{
   display: flex;
   flex-direction: column;
+  margin-left: auto !important;
 }
 .sorts button{
-  width:0.7rem;
+  /* width:0.7rem;
   height:0.7rem;
   font-size: 0.5em;
   font-weight: bolder;
   margin: auto;
-  padding: 0;
+  padding: 0; */
 
 }
 .sorts button :nth-child(1){

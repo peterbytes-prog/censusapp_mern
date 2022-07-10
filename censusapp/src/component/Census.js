@@ -110,10 +110,7 @@ class Census extends Component {
           return (
               <table>
                 <thead>
-                  <tr>
-                    <th>City</th>
-                    <th>Population</th>
-                  </tr>
+                  <Sorts sorts={ this.state.sorts } handleSort = { this.handleSort }/>
                 </thead>
                 <tbody>
                   {trs}
@@ -128,9 +125,6 @@ class Census extends Component {
           <div>
             <div>
               <SearchComponent search={ this.state.search } handleSearch={ this.handleSearch }/>
-            </div>
-            <div>
-              <Sorts sorts={ this.state.sorts } handleSort = { this.handleSort }/>
             </div>
             <div>
               { this.renderResult() }
