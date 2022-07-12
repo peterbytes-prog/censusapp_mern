@@ -2,14 +2,23 @@ import React from 'react';
 
 
 
-function SeachComponent({search, handleSearch}){
+function SeachComponent({search, handleSearch, min, handleMin, max,  handleMax}){
   const onSearch = (event) =>{
     handleSearch(event.target.value);
   }
   return(
     <div className='searchContainer'>
+      <h4>Search</h4>
       <form>
-        <input type='text' value={search} onInput={onSearch}/>
+        <label>
+          <em>city:&nbsp;&nbsp;</em>
+          <input type='text' value={search} onInput={onSearch}/>
+        </label><br/>
+        <label>
+          <em>population:&nbsp;&nbsp;</em>
+          <input value={ min } onInput={ (e)=> handleMin(e.target.value) } style={{'width':'5%'}} type='number' />
+          <input value={ max } onInput={ (e)=> handleMax(e.target.value) } style={{'width':'5%'}} type='number' />
+        </label><br/>
         <button>Search</button>
       </form>
     </div>

@@ -4,13 +4,14 @@ const Census = require('../model/census');
 
 router.get('/census', async (req, res, next)=>{
   const totalDocuments = await Census.countDocuments();
-  let {page=0,search="", limit=10} = req.query;
+  let {page=0,search="", limit=10, min=-1*Infinity, max=Infinity} = req.query;
   let q_city = req.query.search|| "";
     Census.find({
         city:{
               $regex: search,
               $options:'i'
-            }
+            },
+        census:{$gte:parseInt(min,10),$lte:parseInt(max, 10)}
       },
       {},
       {

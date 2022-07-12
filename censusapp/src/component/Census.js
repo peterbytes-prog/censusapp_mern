@@ -37,6 +37,8 @@ class Census extends Component {
             isLoaded: false,
             censuses: [],
             search: '',
+            min: 1,
+            max: 50000,
             page: 0,
             limit: 10,
             totalPages:0,
@@ -55,6 +57,8 @@ class Census extends Component {
         this.handleSort = this.handleSort.bind(this);
         this.handlePage = this.handlePage.bind(this);
         this.handleLimit = this.handleLimit.bind(this);
+        this.handleMin = this.handleMin.bind(this);
+        this.handleMax = this.handleMax.bind(this);
     }
     handleSort(name, ord){
       let cur = this.state.sorts[name];
@@ -70,12 +74,12 @@ class Census extends Component {
     handlePage(val){
       this.fecthData({page:val});
     }
-    fecthData({search, page, limit}){
+    fecthData({search, page, limit, min, max}){
       //search resets page
       if(search){
         page = 1;
       }
-      fetch(`http://localhost:8081/api/census?search=${search||this.state.search}&page=${page==undefined?this.state.page:page}&limit=${limit===undefined?this.state.limit:limit}`, {
+      fetch(`http://localhost:8081/api/census?search=${search==undefined?this.state.search:search}&page=${page==undefined?this.state.page:page}&limit=${limit===undefined?this.state.limit:limit}&min=${min===undefined?this.state.min:min}&max=${max===undefined?this.state.max:max}`, {
           method:'GET'
       })
           .then(res => res.json())
@@ -84,10 +88,12 @@ class Census extends Component {
                   this.setState({
                       isLoaded: true,
                       censuses:sortsFunction(this.state.sorts, data.census),
-                      search: search||this.state.search,
+                      search: search==undefined?this.state.search:search,
                       page: page==undefined?this.state.page:page,
                       totalPages: data.totalPages,
-                      limit:limit===undefined?this.state.limit:limit
+                      limit:limit===undefined?this.state.limit:limit,
+                      min:min===undefined?this.state.min:min,
+                      max:max===undefined?this.state.max:max
                   });
               },
 
@@ -102,6 +108,12 @@ class Census extends Component {
     }
     handleSearch(val){
       this.fecthData({search:val});
+    }
+    handleMax(val){
+      this.fecthData({max:val});
+    }
+    handleMin(val){
+      this.fecthData({min:val});
     }
     handleLimit(val){
       this.fecthData({limit:val});
@@ -168,7 +180,10 @@ class Census extends Component {
         return (
           <div>
             <div>
-              <SearchComponent search={ this.state.search } handleSearch={ this.handleSearch }/>
+              <div className='queryFilter'>
+                <SearchComponent search={ this.state.search } handleSearch={ this.handleSearch } handleMax={this.handleMax} handleMin={this.handleMin}  max={ this.state['max'] } min={ this.state['min'] }/>
+              </div>
+
             </div>
             <div>
               { this.renderResult() }
