@@ -5,10 +5,6 @@ const Census = require('../model/census');
 router.get('/census', async (req, res, next)=>{
   const totalDocuments = await Census.countDocuments();
   let {page=0,search="", limit=10, min=-1*Infinity, max=Infinity} = req.query;
-<<<<<<< HEAD
-=======
-  console.log(max, min)
->>>>>>> a96aa224feaf5fa76ab184817da8ab938e902bf2
   let q_city = req.query.search|| "";
     Census.find({
         city:{
