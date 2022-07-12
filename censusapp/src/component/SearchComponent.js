@@ -4,6 +4,7 @@ import React from 'react';
 
 function SeachComponent({search, handleSearch, min, handleMin, max,  handleMax}){
   const onSearch = (event) =>{
+    alert(event.target.value)
     handleSearch(event.target.value);
   }
   return(
